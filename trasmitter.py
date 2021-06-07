@@ -19,11 +19,25 @@ __version__ = "1.1"
 
 
 import serial
+import serial.tools.list_ports
 
 
 # Global variable that contains the data transmited by Tx Serial.
 buff_tx = ['#12;18#', '#25;47#', '#47;59#', '#0;96#',
             '#44;66#', '#55;98#', '#5;0#', '#23;32#']    
+
+
+def list_ports():
+    '''
+    Función que muestra la cantidad
+    de puertos disponibles.
+    '''
+    port_name = ''
+    ports = serial.tools.list_ports.comports()
+    print('Ports available: ', end='')
+    for port in ports:
+        port_name += ('"' + port.device + '"' + ', ')      
+    print(port_name[:-2])
 
 
 # Configure/Open Serial instance:
@@ -40,7 +54,7 @@ def init_serial():
     ser.parity = serial.PARITY_NONE                 # set the parity bit.
     ser.stopbits = serial.STOPBITS_ONE              # set the number of stop bits.
     ser.bytesize = serial.EIGHTBITS                 # set bytesize.
-    ser.timeout = 5                                 # set timeout.
+    ser.timeout = 0                                 # set timeout.
     return ser
 
 
@@ -79,6 +93,7 @@ def transmitter(data_tx):
             for i in range(len(buff_tx)):
                 data_tx = pop_tx(i)
                 ser.write(data_tx)
+                print('Frame tramsmited: {}'.format(data_tx.decode('utf-8').strip()))
                 
             ser.close()
             print('The port has been closed.')
@@ -88,4 +103,5 @@ def transmitter(data_tx):
 
 
 if __name__ == '__main__':
+    list_ports()
     transmitter(buff_tx)
