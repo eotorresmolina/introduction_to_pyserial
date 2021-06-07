@@ -19,8 +19,23 @@ __version__ = "1.1"
 
 
 import serial
+import serial.tools.list_ports
 
 buff_rx = []    # Global variable that contains the data extracted by Tx Serial.
+
+
+def list_ports():
+    '''
+    Función que muestra la cantidad
+    de puertos disponibles.
+    '''
+    port_name = ''
+    ports = serial.tools.list_ports.comports()
+    print('Ports available: ', end='')
+    for port in ports:
+        port_name += ('"' + port.device + '"' + ', ')      
+    print(port_name[:-2])
+
 
 # Configure/Open Serial instance:
 def init_serial():
@@ -103,6 +118,7 @@ def receiver():
 
 
 if __name__ == '__main__':
+    list_ports()
     receiver()
     print(buff_rx)
 
