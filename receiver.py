@@ -1,6 +1,7 @@
 '''
 [Python]
-Comunicación Serial
+- Comunicación Serial
+- Receiver
 ---------------------------
 Autor: Torres Molina Emmanuel O.
 Version: 1.1
@@ -27,7 +28,7 @@ def init_serial():
     Función que Inicializa/Configura
     un puerto para la posterior comunicación
     serie.
-    Retorna el objeto serial.
+    Retorna la instancia del objeto "serial".
     '''
     ser = serial.Serial()                           # Serial object instance.
     ser.port = 'COM4'                               # set the port name.
