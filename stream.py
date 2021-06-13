@@ -38,7 +38,10 @@ y_lim = ()
 #Configuramos la gráfica
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ln, = plt.plot(x_data, y_data, 'b', label='Data Received')
+ln, = plt.plot(x_data, y_data, color='forestgreen', label='Data Received')
+ax.set_xlabel('$t[seg]$', fontsize=13)
+ax.set_ylabel('$[mV]$', fontsize=13)
+ax.set_facecolor(color='lightyellow')
 ax.legend()
 ax.grid()
 
@@ -107,9 +110,9 @@ def push_rx(data_rx):
                 x_s = pxy.split(';')[0]
                 y_s = pxy.split(';')[1]
                 if is_float(x_s) and is_float(y_s):
-                    x_data.append(int(x_s))
-                    y_data.append(int(y_s))
-                    print(int(x_s), int(y_s))
+                    x_data.append(float(x_s))
+                    y_data.append(float(y_s))
+                    print(float(x_s), float(y_s))
                 else:
                     print('Frame not valid.')
             else:
