@@ -51,34 +51,34 @@ class Stream():
         de puertos disponibles.
         '''
         port_name = ''
-        ports = serial.tools.list_ports.comports()
+        puertos = serial.tools.list_ports.comports()
         print('Ports available: ', end='')
-        for port in ports:
-            port_name += ('"' + port.device + '"' + ', ')      
+        for p in puertos:
+            port_name += ('"' + p.device + '"' + ', ')      
         print(port_name[:-2])
 
     def open_port(self,):
-        if not self.ser.is_open():
-            try:
-                self.ser.open()      # Open port.
-                print('The port "{}" has been opened.'.format(self.ser.portstr))
-            except serial.serialutil.SerialException:
-                print('Could not open port "{}".'.format(self.ser.portstr))
+        try:
+            self.ser.open()      # Open port.
+            print('The port "{}" has been opened.'.format(self.ser.portstr))
+        except serial.serialutil.SerialException:
+            print('Could not open port "{}".'.format(self.ser.portstr))
 
     def close_port(self,):
-        if self.ser.is_open():
-            self.ser.close()
-            print('The port "{}" has been closed.'.format(self.ser.portstr))
+        self.ser.close()
+        print('The port "{}" has been closed.'.format(self.ser.portstr))
 
     def pop_tx(self, index):
-        return self.buff_tx[index]
+        data = self.buff_tx[index]
+        data = data + '\n'
+        data_tx = data.encode()
+        return data_tx
 
     def transmitter(self,):
-        if self.ser.is_open():
-            if self.buff_tx != []:
-                for data in range(len(self.buff_tx)):
-                    msg = self.pop_tx(data)
-                    self.ser.write(msg)
+        if self.buff_tx != []:
+            for data in range(len(self.buff_tx)):
+                msg = self.pop_tx(data)
+                self.ser.write(msg)
 
     def set_values(self, msg):
         if msg[0] == '#' and msg[-1] == '#':
