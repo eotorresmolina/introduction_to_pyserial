@@ -10,7 +10,7 @@ Pequeño ejemplo de introducción a la
 comunicación serial, utilizando el módulo
 "pyserial", en este caso el programa se 
 encarga de transmitir datos con una determinada
-trama.
+trama: '#x;y#'
 '''
 
 __author__ = "Emmanuel Oscar Torres Molina"
