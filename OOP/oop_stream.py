@@ -23,6 +23,7 @@ __version__ = "1.1"
 
 import serial
 import serial.tools.list_ports
+import matplotlib.pyplot as plt
 
 
 class Stream():
@@ -33,8 +34,8 @@ class Stream():
         self.buff_rx = []
         self.x = []
         self.y = []
+        self.y_lim = ()
         self.init_serial(port, baudrate, parity, stopbits, bytesize, timeout)
-        
     
     def init_serial(self, port, baudrate, parity, stopbits, bytesize, timeout):
         self.ser.port = port
@@ -81,14 +82,17 @@ class Stream():
                 self.ser.write(msg)
 
     def set_values(self, msg):
-        if msg[0] == '#' and msg[-1] == '#':
-            data = msg[1:-1]
-            pxy_s = data.split(';')
-            px_s = pxy_s[0]
-            py_s = pxy_s[1]
-            if self.is_float(px_s) and self.is_float(py_s):
-                self.x.append(float(px_s))
-                self.y.append(float(py_s))
+        try:
+            if msg[0] == '#' and msg[-1] == '#':
+                data = msg[1:-1]
+                pxy_s = data.split(';')
+                px_s = pxy_s[0]
+                py_s = pxy_s[1]
+                if self.is_float(px_s) and self.is_float(py_s):
+                    self.x.append(float(px_s))
+                    self.y.append(float(py_s))
+        except IndexError:
+            pass
 
     def push_rx(self, msg):
         try:
@@ -103,23 +107,33 @@ class Stream():
                 else:
                     print('Frame not valid.')
         except IndexError:
-            print('Frame not recivied.')
+            print('Frame not received.')
 
     def receiver(self,):
-        if self.ser.is_open():
-            msg_decoded = None
-            while msg_decoded != '#FIN#' or msg_decoded is None:
-                frame = self.ser.readline()
-                msg_decoded = frame.decode('utf-8').strip()
-                if msg_decoded != '#FIN#':
-                    self.push_rx(msg_decoded)
-                    self.set_values(msg_decoded)
-                else:
-                    print('End of transmission.') 
+        msg_decoded = None
+        while msg_decoded != '#FIN#' or msg_decoded is None:
+            frame = self.ser.readline()
+            msg_decoded = frame.decode('utf-8').strip()
+            if msg_decoded != '#FIN#':
+                self.push_rx(msg_decoded)
+                self.set_values(msg_decoded)
+            else:
+                print('End of transmission.') 
 
-    def is_float(my_string):
+    def is_float(self, my_string):
         try:
             float(my_string)
             return True
         except:
             return False
+
+
+    def setup_figure(self,):
+        self.fig = plt.figure()
+        self.ax = self.fig.add_subplot(111)
+        self.ln, = plt.plot(self.x, self.y, color='forestgreen', label='Data Received')
+        self.ax.set_xlabel('$t[seg]$', fontsize=13)
+        self.ax.set_ylabel('$[mV]$', fontsize=13)
+        self.ax.set_facecolor(color='lightyellow')
+        self.ax.legend()
+        self.ax.grid()
