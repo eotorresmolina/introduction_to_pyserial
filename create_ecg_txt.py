@@ -7,13 +7,9 @@
 Autor: Torres Molina Emmanuel O.
 Version: 1.1
 Descripción:
-Pequeño ejemplo de introducción a la 
-comunicación serial, utilizando el módulo
-"pyserial", en este caso el programa se 
-encarga de recibir datos con una determinada
-trama, se realiza la decodificación de la misma
-y se obtienen los valores a graficar en tiempo
-real usando el objeto "animation" de matplotlib.
+Función que se encarga de cargar
+en un archivo .txt valores con la 
+siguiente trama: '#x;y#'
 '''
 
 __author__ = "Emmanuel Oscar Torres Molina"
