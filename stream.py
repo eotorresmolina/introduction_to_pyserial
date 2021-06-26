@@ -15,6 +15,8 @@ encarga de recibir datos con una determinada
 trama, se realiza la decodificación de la misma
 y se obtienen los valores a graficar en tiempo
 real usando el objeto "animation" de matplotlib.
+
+Trama: '#x;y#'
 '''
 
 __author__ = "Emmanuel Oscar Torres Molina"
@@ -155,7 +157,7 @@ def init_function():
     # desplegado en el eje). 
     global y_lim
     if ax.get_ylim() != y_lim:
-        ylim = ax.get_ylim()
+        y_lim = ax.get_ylim()
         fig.canvas.draw()
 
 
